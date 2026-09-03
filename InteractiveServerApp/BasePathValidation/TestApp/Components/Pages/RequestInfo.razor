@@ -1,0 +1,40 @@
+﻿@page "/request-info"
+
+<PageTitle>Request information</PageTitle>
+<h1>Request information</h1>
+
+<dl>
+    <dt>Scheme</dt>
+    <dd id="scheme">@Scheme</dd>
+    <dt>Host</dt>
+    <dd id="host">@Host</dd>
+    <dt>PathBase</dt>
+    <dd id="path-base">@PathBase</dd>
+    <dt>Path</dt>
+    <dd id="path">@Path</dd>
+</dl>
+
+@code {
+    [CascadingParameter]
+    private HttpContext? HttpContext { get; set; }
+
+    [PersistentState]
+    public string? Scheme { get; set; }
+
+    [PersistentState]
+    public string? Host { get; set; }
+
+    [PersistentState]
+    public string? PathBase { get; set; }
+
+    [PersistentState]
+    public string? Path { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Scheme ??= HttpContext?.Request.Scheme;
+        Host ??= HttpContext?.Request.Host.Value;
+        PathBase ??= HttpContext?.Request.PathBase.Value;
+        Path ??= HttpContext?.Request.Path.Value;
+    }
+}
