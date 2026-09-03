@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="BasePathWebAssemblyValidation/BasePathWebAssemblyValidation.Client/BasePathWebAssemblyValidation.Client.csproj" />
+  <Project Path="BasePathWebAssemblyValidation/BasePathWebAssemblyValidation/BasePathWebAssemblyValidation.csproj" />
+  <Project Path="PrefixProxy/PrefixProxy.csproj" />
+</Solution>
