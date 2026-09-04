@@ -1,0 +1,48 @@
+﻿@page "/request-info"
+@inject NavigationManager Navigation
+
+<PageTitle>Request information</PageTitle>
+
+<h1>Request information</h1>
+
+<dl>
+    <dt>Scheme</dt>
+    <dd>@Scheme</dd>
+
+    <dt>Host</dt>
+    <dd>@Host</dd>
+
+    <dt>PathBase</dt>
+    <dd>@PathBase</dd>
+
+    <dt>Path</dt>
+    <dd>@Path</dd>
+</dl>
+
+@code {
+    public string? Scheme { get; set; }
+    public string? Host { get; set; }
+    public string? PathBase { get; set; }
+    public string? Path { get; set; }
+
+    protected override void OnInitialized()
+    {
+        var current = new Uri(Navigation.Uri);
+        var baseUri = new Uri(Navigation.BaseUri);
+
+        Scheme = current.Scheme;
+        Host = current.Authority;
+
+        PathBase = baseUri.AbsolutePath.TrimEnd('/');
+
+        var fullPath = current.AbsolutePath;
+
+        Path = PathBase.Length > 0 &&
+               fullPath.StartsWith(PathBase, StringComparison.OrdinalIgnoreCase)
+            ? fullPath.Substring(PathBase.Length)
+            : fullPath;
+
+        if (string.IsNullOrEmpty(Path))
+            Path = "/";
+    }
+}
