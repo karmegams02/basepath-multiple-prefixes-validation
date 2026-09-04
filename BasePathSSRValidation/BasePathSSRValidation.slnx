@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="BasePathSSRValidation/BasePathSSRValidation.csproj" />
+  <Project Path="PrefixProxy/PrefixProxy.csproj" />
+</Solution>

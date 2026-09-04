@@ -1,0 +1,37 @@
+﻿@page "/prefix-form"
+@using System.ComponentModel.DataAnnotations
+
+<PageTitle>Prefix form</PageTitle>
+<h1>Prefix form</h1>
+<EditForm Model="Model"
+          FormName="UserForm"
+          OnValidSubmit="Submit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <InputText @bind-Value="Model.Name" />
+    <button type="submit">Submit</button>
+</EditForm>
+@if (submittedName is not null)
+{
+    <p id="result">Submitted: @submittedName</p>
+}
+@code {
+    private string? submittedName;
+
+    [SupplyParameterFromForm]
+    private FormModel? Model { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Model ??= new();
+    }
+    private void Submit()
+    {
+        submittedName = Model?.Name;
+    }
+    private sealed class FormModel
+    {
+        [Required]
+        public string Name { get; set; } = "";
+    }
+}
