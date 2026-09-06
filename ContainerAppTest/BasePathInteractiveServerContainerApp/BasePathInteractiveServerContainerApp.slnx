@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="BasePathInteractiveServerContainerApp/BasePathInteractiveServerContainerApp.csproj" />
+  <Project Path="PrefixProxy/PrefixProxy.csproj" />
+</Solution>
