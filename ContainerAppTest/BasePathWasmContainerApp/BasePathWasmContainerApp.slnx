@@ -1,4 +1,5 @@
 <Solution>
   <Project Path="BasePathWasmContainerApp/BasePathWasmContainerApp.Client/BasePathWasmContainerApp.Client.csproj" />
   <Project Path="BasePathWasmContainerApp/BasePathWasmContainerApp/BasePathWasmContainerApp.csproj" />
+  <Project Path="PrefixProxy/PrefixProxy.csproj" />
 </Solution>

@@ -3,20 +3,22 @@
 
 <PageTitle>Prefix form</PageTitle>
 <h1>Prefix form</h1>
-<EditForm Model="Model"
-          FormName="UserForm"
-          OnValidSubmit="Submit">
+<EditForm Model="Model" FormName="UserForm" OnValidSubmit="Submit">
     <DataAnnotationsValidator />
     <ValidationSummary />
-    <InputText @bind-Value="Model.Name" />
+    <InputText @bind-Value="Model!.Name" />
     <button type="submit">Submit</button>
 </EditForm>
 @if (submittedName is not null)
 {
-    <p id="result">Submitted: @submittedName</p>
+    <p id="result">Submitted: @submittedName; Prefix: @submittedPrefix</p>
 }
 @code {
+    [CascadingParameter]
+    private HttpContext? HttpContext { get; set; }
+
     private string? submittedName;
+    private string? submittedPrefix;
 
     [SupplyParameterFromForm]
     private FormModel? Model { get; set; }
@@ -25,9 +27,11 @@
     {
         Model ??= new();
     }
+
     private void Submit()
     {
-        submittedName = Model?.Name;
+        submittedName = Model!.Name;
+        submittedPrefix = HttpContext?.Request.PathBase.Value;
     }
     private sealed class FormModel
     {

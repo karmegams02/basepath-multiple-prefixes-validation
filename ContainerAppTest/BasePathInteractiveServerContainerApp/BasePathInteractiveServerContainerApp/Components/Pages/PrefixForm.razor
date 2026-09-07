@@ -1,37 +1,45 @@
 ﻿@page "/prefix-form"
-@using System.ComponentModel.DataAnnotations
+@inject NavigationManager Navigation
+@inject IJSRuntime JS
 
 <PageTitle>Prefix form</PageTitle>
+
 <h1>Prefix form</h1>
-<EditForm Model="Model"
-          FormName="UserForm"
-          OnValidSubmit="Submit">
+
+<EditForm Model="model" OnValidSubmit="SubmitAsync">
     <DataAnnotationsValidator />
     <ValidationSummary />
-    <InputText @bind-Value="Model.Name" />
-    <button type="submit">Submit</button>
+
+    <label for="name">Name</label>
+    <InputText id="name" @bind-Value="model.Name" />
+
+    <button id="submit" type="submit">Submit</button>
 </EditForm>
-@if (submittedName is not null)
+
+@if (result is not null)
 {
-    <p id="result">Submitted: @submittedName</p>
+    <p id="result">
+        Submitted: @result.Name; Prefix: @result.Prefix
+    </p>
 }
+
 @code {
-    private string? submittedName;
+    private FormModel model = new();
+    private PrefixFormResponse? result;
 
-    [SupplyParameterFromForm]
-    private FormModel? Model { get; set; }
+    private async Task SubmitAsync()
+    {
+        var requestUri = new Uri(new Uri(Navigation.BaseUri), "api/prefix-form");
+        result = await JS.InvokeAsync<PrefixFormResponse>(
+            "prefixForm.submit", requestUri, model.Name);
+    }
 
-    protected override void OnInitialized()
-    {
-        Model ??= new();
-    }
-    private void Submit()
-    {
-        submittedName = Model?.Name;
-    }
     private sealed class FormModel
     {
-        [Required]
+        [System.ComponentModel.DataAnnotations.Required]
         public string Name { get; set; } = "";
     }
+
+    private sealed record PrefixFormRequest(string Name);
+    private sealed record PrefixFormResponse(string Name, string Prefix);
 }

@@ -14,7 +14,7 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
     options.KnownProxies.Clear();
 });
 var app = builder.Build();
-app.UseForwardedHeaders();  
+app.UseForwardedHeaders();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -30,4 +30,13 @@ app.MapStaticAssets();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
+app.MapPost("/api/prefix-form", (PrefixFormRequest request, HttpRequest httpRequest) =>
+    Results.Ok(new PrefixFormResponse(
+        request.Name,
+        httpRequest.PathBase.Value ?? "")))
+    .DisableAntiforgery();
+
 app.Run();
+
+public sealed record PrefixFormRequest(string Name);
+public sealed record PrefixFormResponse(string Name, string Prefix);
