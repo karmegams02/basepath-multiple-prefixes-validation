@@ -8,7 +8,7 @@ builder.Services
     .AddInteractiveServerComponents();
 
 builder.Services.AddHttpContextAccessor();
-
+builder.Services.AddScoped<HttpClient>();
 builder.Services.Configure<ForwardedHeadersOptions>(options =>
 {
     options.ForwardedHeaders = ForwardedHeaders.XForwardedPrefix;
@@ -58,4 +58,12 @@ app.MapStaticAssets();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
+app.MapPost("/api/prefix-form", (PrefixFormRequest request, HttpRequest httpRequest) =>
+    Results.Ok(new PrefixFormResponse(
+        request.Name,
+        httpRequest.PathBase.Value ?? "")));
+
 app.Run();
+
+public sealed record PrefixFormRequest(string Name);
+public sealed record PrefixFormResponse(string Name, string Prefix);

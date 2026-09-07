@@ -7,14 +7,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<HttpClient>();
 builder.Services.Configure<ForwardedHeadersOptions>(options =>
 {
     options.ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedPrefix;
-    options.KnownNetworks.Clear();  
+    options.KnownNetworks.Clear();
     options.KnownProxies.Clear();
 });
 
 var app = builder.Build();
+
 app.UseForwardedHeaders();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -30,5 +32,13 @@ app.MapStaticAssets();
 app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(BasePathWebAssemblyValidation.Client._Imports).Assembly);
-
+app.MapPost("/api/prefix-form", (PrefixFormRequest request, HttpRequest httpRequest) =>
+{
+    return Results.Ok(new PrefixFormResponse(
+        request.Name,
+        httpRequest.PathBase.Value ?? ""));
+});
 app.Run();
+
+public sealed record PrefixFormRequest(string Name);
+public sealed record PrefixFormResponse(string Name, string Prefix);
