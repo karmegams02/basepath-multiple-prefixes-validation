@@ -10,7 +10,9 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<HttpClient>();
 builder.Services.Configure<ForwardedHeadersOptions>(options =>
 {
-    options.ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedPrefix;
+    options.ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedHost |
+        Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto |
+        Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedPrefix; 
     options.KnownNetworks.Clear();
     options.KnownProxies.Clear();
 });

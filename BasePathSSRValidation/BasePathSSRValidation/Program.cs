@@ -7,7 +7,9 @@ builder.Services.AddRazorComponents();
 builder.Services.AddHttpContextAccessor();
 builder.Services.Configure<ForwardedHeadersOptions>(options =>
 {
-    options.ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedPrefix;
+    options.ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedHost |
+        Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto |
+        Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedPrefix;
     options.KnownNetworks.Clear();
     options.KnownProxies.Clear();
 });

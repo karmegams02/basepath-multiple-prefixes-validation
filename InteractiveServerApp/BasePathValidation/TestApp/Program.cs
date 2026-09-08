@@ -11,7 +11,9 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<HttpClient>();
 builder.Services.Configure<ForwardedHeadersOptions>(options =>
 {
-    options.ForwardedHeaders = ForwardedHeaders.XForwardedPrefix;
+    options.ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedHost |
+        Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto |
+        Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedPrefix; 
 
     // LOCAL TEST ONLY. Do not copy this trust policy to production.
     options.KnownNetworks.Clear();
